@@ -2,20 +2,24 @@ import streamlit as st
 from pyvis.network import Network
 import networkx as nx
 
+#Page title
 st.set_page_config(page_title="Energy Knowledge Graph", layout="wide")
-
+# 3 tabs creation
 tab1, tab2, tab3 = st.tabs(["Renewable Energy", "Nuclear Energy", "Deforestation"])
 
+#Info for tab 1 (you can place your node network here)
 with tab1:
     st.header("Renewable Energy")
     st.write("Placeholder for Renewable Energy knowledge graph.")
 
+# Info for tab 2 (all nuclear information goes in here)
 with tab2:
     st.header("Nuclear Energy")
 
-    # Build the graph
+    # Building the network graph
     visual = nx.Graph()
 
+    # This is how the edges connect to all the nodes
     edges = [
         ("Nuclear Energy", "Nuclear Fission"),
         ("Nuclear Fission", "Uranium-235"),
@@ -44,10 +48,10 @@ with tab2:
         ("Enrichment", "Gaseous diffusion"),
         ("Enrichment", "Laser enrichment"),
     ]
-
+    # Adding the edge connections to the graph
     visual.add_edges_from(edges)
 
-    # Create the network graph with customized style
+    # Graph customizable features (I played around with this for a little while)
     nuclear_net = Network(height="750px", width="100%", bgcolor="#111", font_color="white")
 
     nuclear_net.set_options("""
@@ -72,24 +76,25 @@ with tab2:
   }
     }
     """)
-
+    # Adding custom features to the graph
     nuclear_net.from_nx(visual)
 
-    # Highlight the main node in red
+    # I made the main node here red for easier viewing
     nuclear_net.get_node("Nuclear Energy")["color"] = "red"
 
-    # Color other nodes gray
+    # Made other nodes grey to stick closer to my diagram (just personal preference)
     for node in visual.nodes:
         if node != "Nuclear Energy":
             nuclear_net.get_node(node)["color"] = "#888"
 
-    # Render and display
+    # Render and display visual
     nuclear_net.save_graph("nuclear_graph.html")
 
     with open("nuclear_graph.html", "r", encoding="utf-8") as f:
         html_string = f.read()
         st.components.v1.html(html_string, height=800, scrolling=True)
-
+        
+# Third tab information goes in here
 with tab3:
     st.header("Deforestation")
     st.write("Placeholder for Deforestation knowledge graph.")
